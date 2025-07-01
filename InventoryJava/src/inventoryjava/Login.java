@@ -4,13 +4,19 @@
  */
 package inventoryjava;
 
-import com.sun.jdi.connect.spi.Connection;
-import java.beans.Statement;
+import java.sql.Connection;
+import java.sql.Statement;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import net.proteanit.sql.DbUtils;
-import org.apache.derby.iapi.sql.ResultSet;
-
+import java.sql.ResultSet;
+import java.lang.Integer; // Optional but makes sure you're using the correct one
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Vector;
+import javax.swing.table.DefaultTableModel;
 /**
  *
  * @author aman
@@ -47,7 +53,7 @@ public class Login extends javax.swing.JFrame {
         PasswordTb = new javax.swing.JTextField();
         UidTb = new javax.swing.JTextField();
         jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        LoginButton = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
@@ -121,17 +127,17 @@ public class Login extends javax.swing.JFrame {
             }
         });
 
-        jButton3.setBackground(new java.awt.Color(0, 255, 51));
-        jButton3.setFont(new java.awt.Font(".AppleSystemUIFont", 1, 18)); // NOI18N
-        jButton3.setText("Login");
-        jButton3.addMouseListener(new java.awt.event.MouseAdapter() {
+        LoginButton.setBackground(new java.awt.Color(0, 255, 51));
+        LoginButton.setFont(new java.awt.Font(".AppleSystemUIFont", 1, 18)); // NOI18N
+        LoginButton.setText("Login");
+        LoginButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton3MouseClicked(evt);
+                LoginButtonMouseClicked(evt);
             }
         });
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        LoginButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                LoginButtonActionPerformed(evt);
             }
         });
 
@@ -168,7 +174,7 @@ public class Login extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(LoginButton, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(46, 46, 46)
                         .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -208,7 +214,7 @@ public class Login extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(LoginButton, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(36, 36, 36)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -232,9 +238,9 @@ public class Login extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton2ActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void LoginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoginButtonActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_LoginButtonActionPerformed
 
     private void jLabel5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel5MouseClicked
 System.exit(0);        // TODO add your handling code here:
@@ -245,12 +251,14 @@ System.exit(0);        // TODO add your handling code here:
         PasswordTb.setText("");
     }//GEN-LAST:event_jButton2MouseClicked
 
-    private void jButton3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton3MouseClicked
-        String Query = "select * from aman.USERTBL where UNAME = '"+UidTb.getText()+"' and UPASS = '"+PasswordTb.getText()+"'";
+    private void LoginButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_LoginButtonMouseClicked
+        String Query = "select * from AMAN.USERTBL where UNAME = '"+UidTb.getText()+"' and UPASS = '"+PasswordTb.getText()+"'";
+     
         try {
-        Con = (Connection) DriverManager.getConnection("jdbc:derby://localhost:1527/inventorydb", "aman", "1234");
+        Con = DriverManager.getConnection("jdbc:derby://localhost:1527/inventorydb", "aman", "1234");
         St = Con.createStatement();
-        Rs = St.executeQuery("select * from PRODUCTTBL");
+        Rs = St.executeQuery("select * from AMAN.USERTBL where UNAME = '"+UidTb.getText()+"' and UPASS = '"+PasswordTb.getText()+"'");
+        //ProductTable.setModel(DbUtils.resultSetToTableModel(Rs));
         if(Rs.next())
         {
             new HomeForm().setVisible(true);
@@ -262,7 +270,7 @@ System.exit(0);        // TODO add your handling code here:
     }catch(Exception e){
         e.printStackTrace();
         }
-    }//GEN-LAST:event_jButton3MouseClicked
+    }//GEN-LAST:event_LoginButtonMouseClicked
 
     /**
      * @param args the command line arguments
@@ -300,10 +308,10 @@ System.exit(0);        // TODO add your handling code here:
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton LoginButton;
     private javax.swing.JTextField PasswordTb;
     private javax.swing.JTextField UidTb;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
