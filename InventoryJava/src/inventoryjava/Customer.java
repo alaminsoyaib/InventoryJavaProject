@@ -544,19 +544,18 @@ public class Customer extends javax.swing.JFrame {
             if (Rs.next()) {
                 tempCheck = Rs.getString(1);
             }
-            System.out.println(tempCheck); // Debug print
             if (Integer.parseInt(tempCheck) == 0) {
                 Countlbl.setText("0");
                 amntlbl.setText("0");
                 
             } else {
-                Countlbl.setText(tempCheck); // Display total amount
+                Countlbl.setText(tempCheck); 
                 if (Rs1.next()) {
-                    amntlbl.setText(Rs1.getString(1)); // Display total amount
+                    amntlbl.setText(Rs1.getString(1)); 
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace(); // Show error for debugging
+            e.printStackTrace(); 
         }
         try {
             Con = DriverManager.getConnection("jdbc:derby://localhost:1527/inventorydb", "aman", "1234");
