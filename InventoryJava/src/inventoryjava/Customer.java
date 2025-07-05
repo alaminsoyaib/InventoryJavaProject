@@ -19,13 +19,12 @@ import net.proteanit.sql.DbUtils;
  * @author aman
  */
 public class Customer extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Customer.class.getName());
 
-   
     public Customer() {
         initComponents();
-        SelectCust(); 
+        SelectCust();
     }
 
     Connection Con = null;
@@ -33,7 +32,8 @@ public class Customer extends javax.swing.JFrame {
     Statement St1 = null;
     ResultSet Rs = null;
     ResultSet Rs1 = null;
-    
+    int tempID;
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -425,15 +425,15 @@ public class Customer extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
     public void SelectCust() {
-    try {
-        Con = DriverManager.getConnection("jdbc:derby://localhost:1527/inventorydb", "aman", "1234");
-        St = Con.createStatement();
-        Rs = St.executeQuery("select * from CUSTOMERTBL");
-        CustomerTbl.setModel(DbUtils.resultSetToTableModel(Rs));
-    } catch (SQLException e) {
-        e.printStackTrace(); // Log the error to see if anything else goes wrong
+        try {
+            Con = DriverManager.getConnection("jdbc:derby://localhost:1527/inventorydb", "aman", "1234");
+            St = Con.createStatement();
+            Rs = St.executeQuery("select * from CUSTOMERTBL");
+            CustomerTbl.setModel(DbUtils.resultSetToTableModel(Rs));
+        } catch (SQLException e) {
+            e.printStackTrace(); // Log the error to see if anything else goes wrong
+        }
     }
-}
     private void AddBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddBtnActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_AddBtnActionPerformed
@@ -451,42 +451,38 @@ public class Customer extends javax.swing.JFrame {
     }//GEN-LAST:event_HomeBtnActionPerformed
 
     private void AddBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_AddBtnMouseClicked
-        try{
-        Con = DriverManager.getConnection("jdbc:derby://localhost:1527/Inventorydb","aman","1234");
-        PreparedStatement add = Con.prepareStatement("insert into CUSTOMERTBL values(?,?,?)");
-        add.setInt(1, Integer.valueOf(CustId.getText()));
-        add.setString(2,CustName.getText());
-     
-        add.setString(3, CustPhone.getText());
-        int row = add.executeUpdate();
-        JOptionPane.showConfirmDialog(this, "Customer Successfully added");
-        Con.close();
-        SelectCust();
-        
-        }catch(SQLException e){
+        try {
+            Con = DriverManager.getConnection("jdbc:derby://localhost:1527/Inventorydb", "aman", "1234");
+            PreparedStatement add = Con.prepareStatement("insert into CUSTOMERTBL values(?,?,?)");
+            add.setInt(1, Integer.valueOf(CustId.getText()));
+            add.setString(2, CustName.getText());
+
+            add.setString(3, CustPhone.getText());
+            int row = add.executeUpdate();
+            JOptionPane.showConfirmDialog(this, "Customer Successfully added");
+            Con.close();
+            SelectCust();
+
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }//GEN-LAST:event_AddBtnMouseClicked
 
     private void DeleteBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_DeleteBtnMouseClicked
-        if(CustId.getText().isEmpty())
-        {
-            JOptionPane.showMessageDialog(this,"Enter Customer to be Deleted");
-        }
-        else
-        {
-            try{
-                Con = (Connection) DriverManager.getConnection("jdbc:derby://localhost:1527/inventorydb","aman","1234");
+        if (CustId.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Enter Customer to be Deleted");
+        } else {
+            try {
+                Con = (Connection) DriverManager.getConnection("jdbc:derby://localhost:1527/inventorydb", "aman", "1234");
                 String Id = CustId.getText();
-                String Query = "Delete from aman.CUSTOMERTBL where CUSTID="+Id;
+                String Query = "Delete from aman.CUSTOMERTBL where CUSTID=" + Id;
                 Statement Add = Con.createStatement();
                 Add.executeLargeUpdate(Query);
                 SelectCust();
-                JOptionPane.showMessageDialog(this,"Customer Deletion Successful");
-            }catch(SQLException e)
-        {
-            e.printStackTrace();
-        }
+                JOptionPane.showMessageDialog(this, "Customer Deletion Successful");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }//GEN-LAST:event_DeleteBtnMouseClicked
 
@@ -495,44 +491,53 @@ public class Customer extends javax.swing.JFrame {
     }//GEN-LAST:event_ExitBtnMouseClicked
 
     private void EditBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_EditBtnMouseClicked
-        if(CustId.getText().isEmpty()||CustName.getText().isEmpty()||CustPhone.getText().isBlank()){
-        JOptionPane.showMessageDialog(this,"Missing information");
-        }else{
-        try{
-                Con = (Connection) DriverManager.getConnection("jdbc:derby://localhost:1527/inventorydb","aman","1234");
-                St = Con.createStatement();
-                St1 = Con.createStatement();
-                DefaultTableModel model = (DefaultTableModel) CustomerTbl.getModel();  // Add this line
-                int Myindex = CustomerTbl.getSelectedRow();
-                Rs = St.executeQuery("select count(*) from aman.ORDERTBL where CUSTNAME = '"+model.getValueAt(Myindex,1).toString()+"'");
-                Rs1 = St.executeQuery("select sum(AMOUNT) from aman.ORDERTBL where CUSTNAME = '"+model.getValueAt(Myindex,1).toString()+"'");
-                if (Rs.next()) {
-                Countlbl.setText(Integer.toString(Rs.getInt(1)));  // Make sure Countlbl is declared
-            }
+        if (CustId.getText().isEmpty() || CustName.getText().isEmpty() || CustPhone.getText().isBlank()) {
+            JOptionPane.showMessageDialog(this, "Missing information");
+        } else {
+            try {
+                
+                Con = (Connection) DriverManager.getConnection("jdbc:derby://localhost:1527/Inventorydb", "aman", "1234");
+                String UpdateQuery = "update aman.CUSTOMERTBL set CUSTID = " +  CustId.getText() + ",CUSTNAME='" + CustName.getText() + "'" + ", CUSTPHONE='" + CustPhone.getText() + "' where CUSTID =" + tempID;
+                Statement Add = Con.createStatement();
+                Add.executeUpdate(UpdateQuery);
+                JOptionPane.showMessageDialog(this, "Product update Successful");
+                SelectCust();
+//
+//                Con = (Connection) DriverManager.getConnection("jdbc:derby://localhost:1527/inventorydb","aman","1234");
+//                St = Con.createStatement();
+//                St1 = Con.createStatement();
+//                DefaultTableModel model = (DefaultTableModel) CustomerTbl.getModel();  // Add this line
+//                int Myindex = CustomerTbl.getSelectedRow();
+//                Rs = St.executeQuery("select count(*) from aman.ORDERTBL where CUSTNAME = '"+model.getValueAt(Myindex,1).toString()+"'");
+//                Rs1 = St.executeQuery("select sum(AMOUNT) from aman.ORDERTBL where CUSTNAME = '"+model.getValueAt(Myindex,1).toString()+"'");
+//                if (Rs.next()) {
+//                Countlbl.setText(Integer.toString(Rs.getInt(1)));  // Make sure Countlbl is declared
+//            }
+//
+//            if (Rs1.next()) {
+//                amntlbl.setText(Integer.toString(Rs1.getInt(1)));  // Make sure amntlbl is declared
+//            }
+            } catch (SQLException e) {
 
-            if (Rs1.next()) {
-                amntlbl.setText(Integer.toString(Rs1.getInt(1)));  // Make sure amntlbl is declared
             }
-            }catch(SQLException e)
-        {
-            
-        }
         }
     }//GEN-LAST:event_EditBtnMouseClicked
 
     private void CustomerTblMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_CustomerTblMouseClicked
-        DefaultTableModel model = (DefaultTableModel)CustomerTbl.getModel();
+        DefaultTableModel model = (DefaultTableModel) CustomerTbl.getModel();
         int Myindex = CustomerTbl.getSelectedRow();
+        
         CustId.setText(model.getValueAt(Myindex, 0).toString());
         CustName.setText(model.getValueAt(Myindex, 1).toString());
         CustPhone.setText(model.getValueAt(Myindex, 2).toString());
-        try{
-        Con = DriverManager.getConnection("jdbc:derby://localhost:1527/inventorydb", "aman", "1234");
-        St = Con.createStatement();
-        Rs = St.executeQuery("select * from CUSTOMERTBL");
-        CustomerTbl.setModel(DbUtils.resultSetToTableModel(Rs));
-        }catch(Exception e){
-        
+        tempID =Integer.parseInt(model.getValueAt(Myindex, 0).toString()) ;
+        try {
+            Con = DriverManager.getConnection("jdbc:derby://localhost:1527/inventorydb", "aman", "1234");
+            St = Con.createStatement();
+            Rs = St.executeQuery("select * from CUSTOMERTBL");
+            CustomerTbl.setModel(DbUtils.resultSetToTableModel(Rs));
+        } catch (Exception e) {
+
         }
     }//GEN-LAST:event_CustomerTblMouseClicked
 

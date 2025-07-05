@@ -1,6 +1,5 @@
 package inventoryjava;
 
-
 import java.sql.Connection;
 import java.sql.Statement;
 import java.sql.DriverManager;
@@ -9,7 +8,10 @@ import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import net.proteanit.sql.DbUtils;
 import java.sql.ResultSet;
-import java.lang.Integer; // Optional but makes sure you're using the correct one
+//import java.lang.Integer; // Optional but makes sure you're using the correct one
+//import java.time.LocalDateTime;
+//import java.time.format.DateTimeFormatter;
+//import java.util.Vector;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -24,7 +26,7 @@ public class Product extends javax.swing.JFrame {
     public Product() {
         initComponents();
         SelectProd();
-        GetCat();
+        //GetCat();
     }
     Connection Con = null;
     Statement St = null;
@@ -301,8 +303,10 @@ public class Product extends javax.swing.JFrame {
                                     .addComponent(jLabel7))))
                         .addGap(37, 37, 37)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(DeleteBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(AddBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(DeleteBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(AddBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addComponent(EditBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addComponent(HomeBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -353,33 +357,15 @@ public class Product extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     public void SelectProd() {
-    try {
-        Con = DriverManager.getConnection("jdbc:derby://localhost:1527/inventorydb", "aman", "1234");
-        St = Con.createStatement();
-        Rs = St.executeQuery("select * from PRODUCTTBL");
-        ProductTable.setModel(DbUtils.resultSetToTableModel(Rs));
-    } catch (SQLException e) {
-        e.printStackTrace(); // Log the error to see if anything else goes wrong
-    }
-    
-
-
-private void GetCat()
-    {
-        try{
-        Con = DriverManager.getConnection("jdbc:derby://localhost:1527/inventorydb", "aman", "1234");
-        St = Con.createStatement(); 
-        String query = "select * from aman.CATEGORYTBL";
-        Rs = St.executeQuery(query);
-        while(Rs.next()){
-        String MyCat = Rs.getString("CATNAME");
-        CatCb.addItem(MyCat);
-        }
-        }catch(Exception e){
-        
+        try {
+            Con = DriverManager.getConnection("jdbc:derby://localhost:1527/inventorydb", "aman", "1234");
+            St = Con.createStatement();
+            Rs = St.executeQuery("SELECT * FROM PRODUCTTBL");
+            ProductTable.setModel(DbUtils.resultSetToTableModel(Rs));
+        } catch (SQLException e) {
+            System.out.println(e); // Log the error to see if anything else goes wrong
         }
     }
-}
     private void AddBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddBtnActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_AddBtnActionPerformed
@@ -397,48 +383,44 @@ private void GetCat()
     }//GEN-LAST:event_HomeBtnActionPerformed
 
     private void AddBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_AddBtnMouseClicked
-        try{
-        Con = DriverManager.getConnection("jdbc:derby://localhost:1527/Inventorydb","aman","1234");
-        PreparedStatement add = Con.prepareStatement("insert into PRODUCTTBL values(?,?,?,?,?)");
-        add.setInt(1, Integer.valueOf(ProdId.getText()));
-        add.setString(2,ProdName.getText());
-        add.setInt(3,Integer.valueOf(ProdId.getText()));
-        add.setString(4, ProdDesc.getText());
-        add.setString(5, CatCb.getSelectedItem().toString());
-        int row = add.executeUpdate();
-        JOptionPane.showConfirmDialog(this, "Product Successfully added");
-        Con.close();
-        SelectProd();
-        
-        }catch(SQLException e){
+        try {
+            Con = DriverManager.getConnection("jdbc:derby://localhost:1527/Inventorydb", "aman", "1234");
+            PreparedStatement add = Con.prepareStatement("insert into PRODUCTTBL values(?,?,?,?,?)");
+            add.setInt(1, Integer.valueOf(ProdId.getText()));
+            add.setString(2, ProdName.getText());
+            add.setInt(3, Integer.valueOf(ProdId.getText()));
+            add.setString(4, ProdDesc.getText());
+            add.setString(5, CatCb.getSelectedItem().toString());
+            int row = add.executeUpdate();
+            JOptionPane.showConfirmDialog(this, "Product Successfully added");
+            Con.close();
+            SelectProd();
+
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }//GEN-LAST:event_AddBtnMouseClicked
 
     private void DeleteBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_DeleteBtnMouseClicked
-    if(ProdId.getText().isEmpty())
-        {
-            JOptionPane.showMessageDialog(this,"Enter the Product to be Deleted");
-        }
-        else
-        {
-            try{
-                Con = (Connection) DriverManager.getConnection("jdbc:derby://localhost:1527/inventorydb","aman","1234");
+        if (ProdId.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Enter the Product to be Deleted");
+        } else {
+            try {
+                Con = (Connection) DriverManager.getConnection("jdbc:derby://localhost:1527/inventorydb", "aman", "1234");
                 String Id = ProdId.getText();
-                String Query = "Delete from aman.PRODUCTTBL where PRODID="+Id;
+                String Query = "Delete from aman.PRODUCTTBL where PRODID=" + Id;
                 Statement Add = Con.createStatement();
                 Add.executeLargeUpdate(Query);
                 SelectProd();
-                JOptionPane.showMessageDialog(this,"Product Deletion Successful");
-            }catch(SQLException e)
-        {
-            e.printStackTrace();
-        }
+                JOptionPane.showMessageDialog(this, "Product Deletion Successful");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }//GEN-LAST:event_DeleteBtnMouseClicked
 
     private void ProductTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ProductTableMouseClicked
-        DefaultTableModel model = (DefaultTableModel)ProductTable.getModel();
+        DefaultTableModel model = (DefaultTableModel) ProductTable.getModel();
         int Myindex = ProductTable.getSelectedRow();
         ProdId.setText(model.getValueAt(Myindex, 0).toString());
         ProdName.setText(model.getValueAt(Myindex, 1).toString());
@@ -451,21 +433,20 @@ private void GetCat()
     }//GEN-LAST:event_CloseBtnMouseClicked
 
     private void EditBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_EditBtnMouseClicked
-        if(ProdId.getText().isEmpty()||ProdName.getText().isEmpty()||ProdQty.getText().isBlank()||ProdDesc.getText().isEmpty()){
-        JOptionPane.showMessageDialog(this,"Missing information");
-        }else{
-        try{
-                Con = (Connection) DriverManager.getConnection("jdbc:derby://localhost:1527/inventorydb","aman","1234");
-                
-                String UpdateQuery = "update aman.PRODUCTTBL set PRODNAME =' "+ProdName.getText()+"'"+",PRODQTY="+ProdQty.getText()+""+", PRODDESC='"+ProdDesc.getText()+"'"+",PRODCAT='"+CatCb.getSelectedItem().toString()+"'"+"where PRODID ="+ProdId.getText();
+        if (ProdId.getText().isEmpty() || ProdName.getText().isEmpty() || ProdQty.getText().isBlank() || ProdDesc.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Missing information");
+        } else {
+            try {
+                Con = (Connection) DriverManager.getConnection("jdbc:derby://localhost:1527/Inventorydb", "aman", "1234");
+
+                String UpdateQuery = "update aman.PRODUCTTBL set PRODNAME =' " + ProdName.getText() + "'" + ",PRODQTY=" + ProdQty.getText() + "" + ", PRODDESC='" + ProdDesc.getText() + "'" + ",PRODCAT='" + CatCb.getSelectedItem().toString() + "'" + "where PRODID =" + ProdId.getText();
                 Statement Add = Con.createStatement();
                 Add.executeUpdate(UpdateQuery);
-                JOptionPane.showMessageDialog(this,"Product update Successful");
+                JOptionPane.showMessageDialog(this, "Product update Successful");
                 SelectProd();
-            }catch(SQLException e)
-        {
-            e.printStackTrace();
-        }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }//GEN-LAST:event_EditBtnMouseClicked
 

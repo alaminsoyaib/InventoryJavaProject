@@ -1,0 +1,9 @@
+{
+  "java.project.referencedLibraries": [
+    "lib/**/*.jar",
+    "e:\\2\\Desktop\\A2\\InventoryJavaProject\\derby.jar",
+    "e:\\2\\Desktop\\A2\\InventoryJavaProject\\derbyclient.jar",
+    "e:\\2\\Desktop\\A2\\InventoryJavaProject\\derbynet.jar",
+    "e:\\2\\Desktop\\A2\\InventoryJavaProject\\rs2xml.jar"
+  ]
+}
