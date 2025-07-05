@@ -252,12 +252,12 @@ System.exit(0);        // TODO add your handling code here:
     }//GEN-LAST:event_jButton2MouseClicked
 
     private void LoginButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_LoginButtonMouseClicked
-        String Query = "select * from AMAN.USERTBL where UNAME = '"+UidTb.getText()+"' and UPASS = '"+PasswordTb.getText()+"'";
+        String Query = "select * from AMAN.USERTBL_NEW where UNAME = '"+UidTb.getText()+"' and UPASS = '"+PasswordTb.getText()+"'";
      
         try {
         Con = DriverManager.getConnection("jdbc:derby://localhost:1527/inventorydb", "aman", "1234");
         St = Con.createStatement();
-        Rs = St.executeQuery("select * from AMAN.USERTBL where UNAME = '"+UidTb.getText()+"' and UPASS = '"+PasswordTb.getText()+"'");
+        Rs = St.executeQuery("select * from AMAN.USERTBL_NEW where UNAME = '"+UidTb.getText()+"' and UPASS = '"+PasswordTb.getText()+"'");
         //ProductTable.setModel(DbUtils.resultSetToTableModel(Rs));
         if(Rs.next())
         {
