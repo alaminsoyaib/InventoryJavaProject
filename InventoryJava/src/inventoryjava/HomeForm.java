@@ -1,4 +1,3 @@
-
 package inventoryjava;
 
 public class HomeForm extends javax.swing.JFrame {
@@ -6,7 +5,7 @@ public class HomeForm extends javax.swing.JFrame {
     public HomeForm() {
         initComponents();
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -279,7 +278,7 @@ public class HomeForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void LogoutButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LogoutButtonActionPerformed
-        
+
     }//GEN-LAST:event_LogoutButtonActionPerformed
 
     private void ProductMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ProductMouseClicked
@@ -298,17 +297,17 @@ public class HomeForm extends javax.swing.JFrame {
     }//GEN-LAST:event_customerMouseClicked
 
     private void orderMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_orderMouseClicked
-new Order().setVisible(true);
+        new Order().setVisible(true);
         this.dispose();        // TODO add your handling code here:
     }//GEN-LAST:event_orderMouseClicked
 
     private void categorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_categorMouseClicked
-new Category().setVisible(true);
+        new Category().setVisible(true);
         this.dispose();        // TODO add your handling code here:
     }//GEN-LAST:event_categorMouseClicked
 
     private void LogoutButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_LogoutButtonMouseClicked
-      new Login().setVisible(true);
+        new Login().setVisible(true);
         this.dispose();  // TODO add your handling code here:
     }//GEN-LAST:event_LogoutButtonMouseClicked
 
@@ -317,7 +316,7 @@ new Category().setVisible(true);
     }//GEN-LAST:event_ProductButtonMouseClicked
 
     private void CloseMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_CloseMouseClicked
-        // TODO add your handling code here:
+        System.exit(0);        // TODO add your handling code here:
     }//GEN-LAST:event_CloseMouseClicked
 
     /**
