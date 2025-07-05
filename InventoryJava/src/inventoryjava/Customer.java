@@ -495,15 +495,14 @@ public class Customer extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Missing information");
         } else {
             try {
-                
+
                 Con = (Connection) DriverManager.getConnection("jdbc:derby://localhost:1527/Inventorydb", "aman", "1234");
-                String UpdateQuery = "update aman.CUSTOMERTBL set CUSTID = " +  CustId.getText() + ",CUSTNAME='" + CustName.getText() + "'" + ", CUSTPHONE='" + CustPhone.getText() + "' where CUSTID =" + tempID;
+                String UpdateQuery = "update aman.CUSTOMERTBL set CUSTID = " + CustId.getText() + ",CUSTNAME='" + CustName.getText() + "'" + ", CUSTPHONE='" + CustPhone.getText() + "' where CUSTID =" + tempID;
                 Statement Add = Con.createStatement();
                 Add.executeUpdate(UpdateQuery);
                 JOptionPane.showMessageDialog(this, "Product update Successful");
                 SelectCust();
-//
-//                Con = (Connection) DriverManager.getConnection("jdbc:derby://localhost:1527/inventorydb","aman","1234");
+
 //                St = Con.createStatement();
 //                St1 = Con.createStatement();
 //                DefaultTableModel model = (DefaultTableModel) CustomerTbl.getModel();  // Add this line
@@ -526,11 +525,39 @@ public class Customer extends javax.swing.JFrame {
     private void CustomerTblMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_CustomerTblMouseClicked
         DefaultTableModel model = (DefaultTableModel) CustomerTbl.getModel();
         int Myindex = CustomerTbl.getSelectedRow();
-        
+
         CustId.setText(model.getValueAt(Myindex, 0).toString());
         CustName.setText(model.getValueAt(Myindex, 1).toString());
         CustPhone.setText(model.getValueAt(Myindex, 2).toString());
-        tempID =Integer.parseInt(model.getValueAt(Myindex, 0).toString()) ;
+        tempID = Integer.parseInt(model.getValueAt(Myindex, 0).toString());
+
+        try {
+            Statement St = Con.createStatement();
+            Statement St1 = Con.createStatement();
+
+            String custName = model.getValueAt(Myindex, 1).toString();
+            
+
+            ResultSet Rs = St.executeQuery("SELECT COUNT(*) FROM ORDERTBL WHERE CUSTNAME = '" + custName + "'");
+            ResultSet Rs1 = St1.executeQuery("SELECT SUM(AMOUNT) FROM ORDERTBL WHERE CUSTNAME = '" + custName + "'");
+            String tempCheck = null;
+            if (Rs.next()) {
+                tempCheck = Rs.getString(1);
+            }
+            System.out.println(tempCheck); // Debug print
+            if (Integer.parseInt(tempCheck) == 0) {
+                Countlbl.setText("0");
+                amntlbl.setText("0");
+                
+            } else {
+                Countlbl.setText(tempCheck); // Display total amount
+                if (Rs1.next()) {
+                    amntlbl.setText(Rs1.getString(1)); // Display total amount
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace(); // Show error for debugging
+        }
         try {
             Con = DriverManager.getConnection("jdbc:derby://localhost:1527/inventorydb", "aman", "1234");
             St = Con.createStatement();
