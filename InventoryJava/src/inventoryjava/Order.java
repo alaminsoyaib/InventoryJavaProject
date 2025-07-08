@@ -275,10 +275,7 @@ public class Order extends javax.swing.JFrame {
         BillTbl.setFont(new java.awt.Font(".AppleSystemUIFont", 1, 14)); // NOI18N
         BillTbl.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+
             },
             new String [] {
                 "Num", "Product", "Quantity", "UPrice", "Total"
