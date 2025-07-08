@@ -768,23 +768,30 @@ public class Order extends javax.swing.JFrame {
     }//GEN-LAST:event_AddBtnActionPerformed
 
     private void AddBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_AddBtnMouseClicked
-        try {
+        if (CustNamelbl.getText() != "CustName") {
+            try {
 
-            Con = DriverManager.getConnection("jdbc:derby://localhost:1527/Inventorydb", "aman", "1234");
-            PreparedStatement add = Con.prepareStatement("insert into ORDERTBL values(?,?,?,?)");
-            add.setInt(1, OID);
-            add.setString(2, CustNamelbl.getText());
-            add.setString(3, Datelbl.getText());
-            add.setInt(4, Integer.valueOf(TotAmtlbl.getText()));
-            int row = add.executeUpdate();
-            JOptionPane.showConfirmDialog(this, "Order Successfully added");
-            Con.close();
+                Con = DriverManager.getConnection("jdbc:derby://localhost:1527/Inventorydb", "aman", "1234");
+                PreparedStatement add = Con.prepareStatement("insert into ORDERTBL values(?,?,?,?)");
+                add.setInt(1, OID);
+                add.setString(2, CustNamelbl.getText());
+                add.setString(3, Datelbl.getText());
+                add.setInt(4, Integer.valueOf(TotAmtlbl.getText()));
+                int row = add.executeUpdate();
+                JOptionPane.showConfirmDialog(this, "Order Successfully added");
+                Con.close();
 //            OrderID();
-            new HomeForm().setVisible(true);
-            this.dispose();
+                new HomeForm().setVisible(true);
+                this.dispose();
 
-        } catch (SQLException e) {
-            e.printStackTrace();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        else if (flag == 0 || Qtytb.getText().isEmpty() || Price.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Select Product and Enter Quantity");
+        } else {
+            JOptionPane.showMessageDialog(this, "Select a Customer first...");
         }
     }//GEN-LAST:event_AddBtnMouseClicked
 
@@ -847,11 +854,11 @@ public class Order extends javax.swing.JFrame {
         DefaultTableModel model = (DefaultTableModel) BillTbl.getModel();
         int Myindex = BillTbl.getSelectedRow();
         int TP = (int) model.getValueAt(Myindex, 4);
-        
+
         int tmp = Integer.valueOf(TotAmtlbl.getText());
-        tmp-=TP;
+        tmp -= TP;
         TotAmtlbl.setText(String.valueOf(tmp));
-        
+
         model.removeRow(Myindex);
     }//GEN-LAST:event_ExcludeBtnMouseClicked
 
