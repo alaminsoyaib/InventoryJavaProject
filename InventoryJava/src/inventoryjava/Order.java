@@ -846,6 +846,12 @@ public class Order extends javax.swing.JFrame {
     private void ExcludeBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ExcludeBtnMouseClicked
         DefaultTableModel model = (DefaultTableModel) BillTbl.getModel();
         int Myindex = BillTbl.getSelectedRow();
+        int TP = (int) model.getValueAt(Myindex, 4);
+        
+        int tmp = Integer.valueOf(TotAmtlbl.getText());
+        tmp-=TP;
+        TotAmtlbl.setText(String.valueOf(tmp));
+        
         model.removeRow(Myindex);
     }//GEN-LAST:event_ExcludeBtnMouseClicked
 
