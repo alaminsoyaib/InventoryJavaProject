@@ -751,6 +751,7 @@ public class Order extends javax.swing.JFrame {
                 e.printStackTrace();
             }
         }*/
+        new OrdersView().setVisible(true);
     }//GEN-LAST:event_EditBtnMouseClicked
 
     private void HomeBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_HomeBtnActionPerformed
@@ -778,7 +779,9 @@ public class Order extends javax.swing.JFrame {
             int row = add.executeUpdate();
             JOptionPane.showConfirmDialog(this, "Order Successfully added");
             Con.close();
-            OrderID();
+//            OrderID();
+            new HomeForm().setVisible(true);
+            this.dispose();
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -791,29 +794,6 @@ public class Order extends javax.swing.JFrame {
     int i = 1, Uprice, tot = 0, total;
     String Prodname;
     private void AddToBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_AddToBtnMouseClicked
-//        DefaultTableModel model = (DefaultTableModel)ProductTable.getModel();
-//        int Myindex = ProductTable.getSelectedRow();
-//        productid = Integer.valueOf(model.getValueAt(Myindex, 0).toString());
-//        if(productid<=0)
-//        {
-//            JOptionPane.showMessageDialog(this,"Enter the Product to be Deleted");
-//        }
-//        else
-//        {
-//            try{
-//                Con = (Connection) DriverManager.getConnection("jdbc:derby://localhost:1527/inventorydb","aman","1234");
-//                String Id = productid;
-//                String Query = "Delete from aman.PRODUCTTBL where PRODID="+Id;
-//                Statement Add = Con.createStatement();
-//                Add.executeLargeUpdate(Query);
-//                SelectProd();
-//                JOptionPane.showMessageDialog(this,"Product Deletion Successful");
-//            }catch(SQLException e)
-//            {
-//                e.printStackTrace();
-//            }
-//        }
-//        
 
         if (flag == 0 || Qtytb.getText().isEmpty() || Price.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Select Product and Enter Quantity");
@@ -864,7 +844,9 @@ public class Order extends javax.swing.JFrame {
     }//GEN-LAST:event_AddToBtn1ActionPerformed
 
     private void ExcludeBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ExcludeBtnMouseClicked
-        // TODO add your handling code here:
+        DefaultTableModel model = (DefaultTableModel) BillTbl.getModel();
+        int Myindex = BillTbl.getSelectedRow();
+        model.removeRow(Myindex);
     }//GEN-LAST:event_ExcludeBtnMouseClicked
 
     private void ExcludeBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ExcludeBtnActionPerformed
