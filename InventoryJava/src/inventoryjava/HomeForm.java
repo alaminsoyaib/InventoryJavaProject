@@ -123,7 +123,7 @@ public class HomeForm extends javax.swing.JFrame {
         CustomerButton.setForeground(new java.awt.Color(51, 153, 255));
         CustomerButton.setText("CUSTOMER");
 
-        customer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/user_red.png"))); // NOI18N
+        customer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/Customer.png"))); // NOI18N
         customer.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 customerMouseClicked(evt);
@@ -156,7 +156,7 @@ public class HomeForm extends javax.swing.JFrame {
 
         User.setBackground(new java.awt.Color(204, 255, 204));
         User.setForeground(new java.awt.Color(51, 255, 204));
-        User.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/user.png"))); // NOI18N
+        User.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/user (2).png"))); // NOI18N
         User.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 UserMouseClicked(evt);
@@ -164,7 +164,7 @@ public class HomeForm extends javax.swing.JFrame {
         });
 
         categor.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        categor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/PC.jpg"))); // NOI18N
+        categor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/category.png"))); // NOI18N
         categor.setMaximumSize(new java.awt.Dimension(60, 60));
         categor.setMinimumSize(new java.awt.Dimension(60, 60));
         categor.setPreferredSize(new java.awt.Dimension(60, 60));
