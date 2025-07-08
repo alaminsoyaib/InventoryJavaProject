@@ -425,7 +425,7 @@ public void SelectUser() {
     private void UserTblMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_UserTblMouseClicked
         DefaultTableModel model = (DefaultTableModel) UserTbl.getModel();
         Myindex = UserTbl.getSelectedRow();
-        uidTest.setText(model.getValueAt(Myindex, 0).toString());
+        uidTest.setText(model.getValueAt(Myindex, 0).toString());   
         Uname.setText(model.getValueAt(Myindex, 1).toString());
         Upass.setText(model.getValueAt(Myindex, 2).toString());
         Uphone.setText(model.getValueAt(Myindex, 3).toString());

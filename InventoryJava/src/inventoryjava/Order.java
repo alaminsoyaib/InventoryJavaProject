@@ -1,5 +1,5 @@
-
 package inventoryjava;
+
 import java.sql.Connection;
 import java.sql.Statement;
 import java.sql.DriverManager;
@@ -12,6 +12,8 @@ import java.lang.Integer; // Optional but makes sure you're using the correct on
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -19,21 +21,38 @@ import javax.swing.table.DefaultTableModel;
  * @author aman
  */
 public class Order extends javax.swing.JFrame {
-    
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Order.class.getName());
 
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Order.class.getName());
 
     public Order() {
         initComponents();
+        OrderID();
         SelectProd();
         SelectCust();
         GetToday();
+
     }
     Connection Con = null;
     Statement St = null;
     ResultSet Rs = null;
+    int OID = 0;
 
- 
+    public void OrderID() {
+        try {
+            Con = DriverManager.getConnection("jdbc:derby://localhost:1527/Inventorydb", "aman", "1234");
+            Statement tempGET = Con.createStatement();
+            ResultSet getIDStatement = tempGET.executeQuery("SELECT ORDERID FROM AMAN.ORDERTBL ORDER BY ORDERID DESC FETCH FIRST ROW ONLY");
+            if (getIDStatement.next()) {
+                OID = getIDStatement.getInt("ORDERID");
+            }
+            ++OID;
+            BillLbl.setText(String.valueOf(OID));
+        } catch (SQLException ex) {
+            Logger.getLogger(Order.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -64,7 +83,7 @@ public class Order extends javax.swing.JFrame {
         CustNamelbl = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jLabel13 = new javax.swing.JLabel();
-        BillId = new javax.swing.JTextField();
+        BillLbl = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
         HomeBtn = new javax.swing.JButton();
         AddBtn = new javax.swing.JButton();
@@ -349,17 +368,18 @@ public class Order extends javax.swing.JFrame {
         jLabel13.setForeground(new java.awt.Color(51, 153, 255));
         jLabel13.setText("OrderId");
 
+        BillLbl.setFont(new java.awt.Font(".AppleSystemUIFont", 1, 14)); // NOI18N
+        BillLbl.setForeground(new java.awt.Color(51, 153, 255));
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(117, 117, 117)
-                        .addComponent(BillId, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel13))
+                .addComponent(jLabel13)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 135, Short.MAX_VALUE)
+                .addComponent(BillLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -368,8 +388,8 @@ public class Order extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel13)
-                    .addComponent(BillId, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                    .addComponent(BillLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(3, 3, 3))
         );
 
         jPanel5.setBackground(new java.awt.Color(255, 255, 255));
@@ -439,9 +459,9 @@ public class Order extends javax.swing.JFrame {
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(EditBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(AddBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(EditBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 44, Short.MAX_VALUE)
+                    .addComponent(AddBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(21, 21, 21)
                 .addComponent(HomeBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -490,8 +510,8 @@ public class Order extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel10)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(Qtytb)
-                .addContainerGap())
+                .addComponent(Qtytb, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -574,7 +594,7 @@ public class Order extends javax.swing.JFrame {
                                         .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                             .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGap(52, 52, 52)
+                                        .addGap(33, 33, 33)
                                         .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                             .addGroup(jPanel10Layout.createSequentialGroup()
@@ -590,7 +610,7 @@ public class Order extends javax.swing.JFrame {
                             .addGroup(jPanel10Layout.createSequentialGroup()
                                 .addGap(22, 22, 22)
                                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
                         .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 621, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -629,7 +649,7 @@ public class Order extends javax.swing.JFrame {
                                 .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 137, Short.MAX_VALUE))))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 140, Short.MAX_VALUE))))
                     .addGroup(jPanel10Layout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(24, 24, 24)
@@ -659,52 +679,54 @@ public class Order extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
  public void SelectProd() {
-    try {
-        Con = DriverManager.getConnection("jdbc:derby://localhost:1527/inventorydb", "aman", "1234");
-        St = Con.createStatement();
-        Rs = St.executeQuery("select * from PRODUCTTBL");
-        ProductTable.setModel(DbUtils.resultSetToTableModel(Rs));
-    } catch (SQLException e) {
-        e.printStackTrace(); // Log the error to see if anything else goes wrong
+        try {
+            Con = DriverManager.getConnection("jdbc:derby://localhost:1527/inventorydb", "aman", "1234");
+            St = Con.createStatement();
+            Rs = St.executeQuery("select * from PRODUCTTBL");
+            ProductTable.setModel(DbUtils.resultSetToTableModel(Rs));
+        } catch (SQLException e) {
+            e.printStackTrace(); // Log the error to see if anything else goes wrong
+        }
     }
-}
- public void SelectCust() {
-    try {
-        Con = DriverManager.getConnection("jdbc:derby://localhost:1527/inventorydb", "aman", "1234");
-        St = Con.createStatement();
-        Rs = St.executeQuery("select * from CUSTOMERTBL");
-        CustomerTbl.setModel(DbUtils.resultSetToTableModel(Rs));
-    } catch (SQLException e) {
-        e.printStackTrace(); // Log the error to see if anything else goes wrong
+
+    public void SelectCust() {
+        try {
+            Con = DriverManager.getConnection("jdbc:derby://localhost:1527/inventorydb", "aman", "1234");
+            St = Con.createStatement();
+            Rs = St.executeQuery("select * from CUSTOMERTBL");
+            CustomerTbl.setModel(DbUtils.resultSetToTableModel(Rs));
+        } catch (SQLException e) {
+            e.printStackTrace(); // Log the error to see if anything else goes wrong
+        }
     }
-}
- private void GetToday(){
-     DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
-     LocalDateTime now = LocalDateTime.now();
-     //System.out.println(dtf.format(now));
-     Datelbl.setText(dtf.format(now));
- }
- private void update(){
-     int newqty = oldqty - Integer.valueOf(Qtytb.getText());
- try{
-                Con = (Connection) DriverManager.getConnection("jdbc:derby://localhost:1527/inventorydb","aman","1234");
-                
-                String UpdateQuery = "update aman.PRODUCTTBL set PRODQTY ="+newqty+""+"where PRODID ="+productid;
-                Statement Add = Con.createStatement();
-                Add.executeUpdate(UpdateQuery);
-                JOptionPane.showMessageDialog(this,"Category update Successful");
-                SelectProd();
-            }catch(SQLException e)
-        {
+
+    private void GetToday() {
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+        LocalDateTime now = LocalDateTime.now();
+        //System.out.println(dtf.format(now));
+        Datelbl.setText(dtf.format(now));
+    }
+
+    private void update() {
+        int newqty = oldqty - Integer.valueOf(Qtytb.getText());
+        try {
+            Con = (Connection) DriverManager.getConnection("jdbc:derby://localhost:1527/inventorydb", "aman", "1234");
+
+            String UpdateQuery = "update aman.PRODUCTTBL set PRODQTY =" + newqty + "" + "where PRODID =" + productid;
+            Statement Add = Con.createStatement();
+            Add.executeUpdate(UpdateQuery);
+            JOptionPane.showMessageDialog(this, "Category update Successful");
+            SelectProd();
+        } catch (SQLException e) {
             e.printStackTrace();
         }
- }
+    }
     private void BillTblMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BillTblMouseClicked
         // TODO add your handling code here:
     }//GEN-LAST:event_BillTblMouseClicked
 
     private void CustomerTblMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_CustomerTblMouseClicked
-      DefaultTableModel model = (DefaultTableModel)CustomerTbl.getModel();
+        DefaultTableModel model = (DefaultTableModel) CustomerTbl.getModel();
         int Myindex = CustomerTbl.getSelectedRow();
         //CustId.setText(model.getValueAt(Myindex, 0).toString());
         CustNamelbl.setText(model.getValueAt(Myindex, 1).toString());
@@ -716,7 +738,7 @@ public class Order extends javax.swing.JFrame {
     }//GEN-LAST:event_EditBtnActionPerformed
 
     private void EditBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_EditBtnMouseClicked
-     /*   if(ProdId.getText().isEmpty()||ProdName.getText().isEmpty()||ProdQty.getText().isBlank()||ProdDesc.getText().isEmpty()){
+        /*   if(ProdId.getText().isEmpty()||ProdName.getText().isEmpty()||ProdQty.getText().isBlank()||ProdDesc.getText().isEmpty()){
             JOptionPane.showMessageDialog(this,"Missing information");
         }else{
             try{
@@ -740,7 +762,7 @@ public class Order extends javax.swing.JFrame {
 
     private void HomeBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_HomeBtnMouseClicked
         new HomeForm().setVisible(true);
-        this.dispose();  
+        this.dispose();
     }//GEN-LAST:event_HomeBtnMouseClicked
 
     private void AddBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddBtnActionPerformed
@@ -748,32 +770,29 @@ public class Order extends javax.swing.JFrame {
     }//GEN-LAST:event_AddBtnActionPerformed
 
     private void AddBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_AddBtnMouseClicked
-        if(BillId.getText().isEmpty()){
-        JOptionPane.showConfirmDialog(this, "Enter the Bill Id");
-        }else{
-        try{
-            
-            Con = DriverManager.getConnection("jdbc:derby://localhost:1527/Inventorydb","aman","1234");
+        try {
+
+            Con = DriverManager.getConnection("jdbc:derby://localhost:1527/Inventorydb", "aman", "1234");
             PreparedStatement add = Con.prepareStatement("insert into ORDERTBL values(?,?,?,?)");
-            add.setInt(1, Integer.valueOf(BillId.getText()));
-            add.setString(2,CustNamelbl.getText());
+            add.setInt(1, OID);
+            add.setString(2, CustNamelbl.getText());
             add.setString(3, Datelbl.getText());
             add.setInt(4, Integer.valueOf(TotAmtlbl.getText()));
             int row = add.executeUpdate();
             JOptionPane.showConfirmDialog(this, "Order Successfully added");
             Con.close();
-            
+            OrderID();
 
-        }catch(SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
-        } }
+        }
     }//GEN-LAST:event_AddBtnMouseClicked
 
     private void AddToBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddToBtnActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_AddToBtnActionPerformed
-int i = 1,Uprice,tot = 0,total;
-String Prodname;
+    int i = 1, Uprice, tot = 0, total;
+    String Prodname;
     private void AddToBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_AddToBtnMouseClicked
 //        DefaultTableModel model = (DefaultTableModel)ProductTable.getModel();
 //        int Myindex = ProductTable.getSelectedRow();
@@ -798,39 +817,37 @@ String Prodname;
 //            }
 //        }
 //        
-        
-       if(flag == 0|| Qtytb.getText().isEmpty()||Price.getText().isEmpty()){
-       JOptionPane.showMessageDialog(this,"Select Product and Enter Quantity");
-       }else
-       {
-       Uprice = Integer.valueOf(Price.getText());
-       tot = Uprice * Integer.valueOf(Qtytb.getText());
-       Vector v = new Vector();
-       v.add(i);
-       v.add(Prodname);
-       v.add(Qtytb.getText());
-       v.add(Uprice);
-       v.add(tot);
-       DefaultTableModel dt = (DefaultTableModel)BillTbl.getModel();
-       dt.addRow(v);
-       total = total+tot;
-       TotAmtlbl.setText(total+""); 
-       update();
-       i++;
-       
-       
-       }
+
+        if (flag == 0 || Qtytb.getText().isEmpty() || Price.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Select Product and Enter Quantity");
+        } else {
+            Uprice = Integer.valueOf(Price.getText());
+            tot = Uprice * Integer.valueOf(Qtytb.getText());
+            Vector v = new Vector();
+            v.add(i);
+            v.add(Prodname);
+            v.add(Qtytb.getText());
+            v.add(Uprice);
+            v.add(tot);
+            DefaultTableModel dt = (DefaultTableModel) BillTbl.getModel();
+            dt.addRow(v);
+            total = total + tot;
+            TotAmtlbl.setText(total + "");
+            update();
+            i++;
+
+        }
     }//GEN-LAST:event_AddToBtnMouseClicked
-int flag = 0,productid,oldqty;
+    int flag = 0, productid, oldqty;
     private void ProductTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ProductTableMouseClicked
-        DefaultTableModel model = (DefaultTableModel)ProductTable.getModel();
+        DefaultTableModel model = (DefaultTableModel) ProductTable.getModel();
         int Myindex = ProductTable.getSelectedRow();
         productid = Integer.valueOf(model.getValueAt(Myindex, 0).toString());
-       
+
         Prodname = model.getValueAt(Myindex, 1).toString();
         oldqty = Integer.valueOf(model.getValueAt(Myindex, 2).toString());
-       // ProdDesc.setText(model.getValueAt(Myindex, 3).toString());
-       flag = 1;
+        // ProdDesc.setText(model.getValueAt(Myindex, 3).toString());
+        flag = 1;
     }//GEN-LAST:event_ProductTableMouseClicked
 
     private void CloseBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_CloseBtnMouseClicked
@@ -838,10 +855,10 @@ int flag = 0,productid,oldqty;
     }//GEN-LAST:event_CloseBtnMouseClicked
 
     private void AddToBtn1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_AddToBtn1MouseClicked
-        try{
-        BillTbl.print(); 
-        }catch(Exception exp){
-         exp.printStackTrace();
+        try {
+            BillTbl.print();
+        } catch (Exception exp) {
+            exp.printStackTrace();
         }// TODO add your handling code here:
     }//GEN-LAST:event_AddToBtn1MouseClicked
 
@@ -886,7 +903,7 @@ int flag = 0,productid,oldqty;
     private javax.swing.JButton AddBtn;
     private javax.swing.JButton AddToBtn;
     private javax.swing.JButton AddToBtn1;
-    private javax.swing.JTextField BillId;
+    private javax.swing.JLabel BillLbl;
     private javax.swing.JTable BillTbl;
     private javax.swing.JLabel CloseBtn2;
     private javax.swing.JLabel CustNamelbl;
